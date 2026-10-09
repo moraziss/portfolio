@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Вадим Грушин — Go-разработчик (Backend / DevOps) — резюме</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="resume.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="head">
+    <h1>Вадим Грушин</h1>
+    <p class="role">Go-разработчик · Backend / DevOps</p>
+    <p class="contacts">
+      <span>Алматы</span>
+      <span><b>grusinvadim55@gmail.com</b></span>
+      <span class="phone"></span>
+      <span>Telegram: @moraziss</span>
+      <span>github.com/moraziss</span>
+      <span>linkedin.com/in/vadim-grushin-0a9a0b392</span>
+    </p>
+  </header>
+
+  <section>
+    <h2>О себе</h2>
+    <p class="summary">Go-разработчик (backend / DevOps). С 2024 года пишу на Go: REST API и real-time сервисы на PostgreSQL, Redis и WebSocket. Довожу проекты до развёртывания: тесты, CI/CD на GitHub Actions, Docker и Kubernetes, мониторинг на Prometheus и Grafana. Ищу стажировку или позицию Go-разработчика в Алматы.</p>
+  </section>
+
+  <section>
+    <h2>Навыки</h2>
+    <dl class="skills">
+      <dt>Языки</dt><dd>Go, SQL, Bash</dd>
+      <dt>Backend</dt><dd>REST, OpenAPI, JWT, WebSocket, pgx, testcontainers-go</dd>
+      <dt>Базы данных</dt><dd>PostgreSQL, Redis</dd>
+      <dt>DevOps</dt><dd>Docker, Kubernetes, Helm, GitHub Actions, Nginx, Linux</dd>
+      <dt>Мониторинг</dt><dd>Prometheus, Grafana, Alertmanager</dd>
+      <dt>Качество</dt><dd>unit- и integration-тесты, k6, pprof, golangci-lint</dd>
+      <dt>Знаком</dt><dd class="dim">gRPC, RabbitMQ / Kafka, GitLab CI, Loki</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Проекты и опыт</h2>
+
+    <article class="job">
+      <div class="job-head">
+        <h3>fintracker <span class="tag">backend, pet-проект, в разработке</span></h3>
+        <span class="dates">янв 2025 — н. в.</span>
+      </div>
+      <p class="stack">Go, PostgreSQL, Redis, Docker, Kubernetes, Helm, GitHub Actions, Prometheus, Grafana · <a href="https://github.com/moraziss/fintracker">github.com/moraziss/fintracker</a></p>
+      <ul>
+        <li>Спроектировал REST API на <b>трёхслойной архитектуре</b> (handler → service → repository): миграции, индексы под аналитические запросы, спецификация в OpenAPI.</li>
+        <li>Реализовал <b>JWT-аутентификацию</b> с ротацией refresh-токенов и bcrypt; операции с балансом атомарны за счёт транзакций.</li>
+        <li>Добавил <b>кэширование и rate limiting на Redis</b> для аналитических эндпоинтов.</li>
+        <li>Настроил <b>CI/CD на GitHub Actions</b> (lint → test → build → deploy), мониторинг на Prometheus/Grafana с алертами; провёл нагрузочное тестирование k6 и профилирование pprof.</li>
+        <li>Развернул на VPS (Nginx, HTTPS) и в <b>Kubernetes через Helm-чарт</b>.</li>
+      </ul>
+    </article>
+
+    <article class="job">
+      <div class="job-head">
+        <h3>Real-time Chat &amp; Task Manager <span class="tag">fullstack (Go + Flutter), pet-проект</span></h3>
+        <span class="dates">май 2025 — н. в.</span>
+      </div>
+      <p class="stack">Go, PostgreSQL, WebSocket, Docker, GitHub Actions, Flutter, Riverpod · <a href="https://github.com/moraziss/realtime_chat_app">github.com/moraziss/realtime_chat_app</a></p>
+      <ul>
+        <li>Разработал backend мессенджера: <b>~20 REST-эндпоинтов и WebSocket-канал</b> реального времени — комнаты, онлайн-статус, прочтение, файлы, live-обновления задач; тесты сервисов, хендлеров и WS-хаба.</li>
+        <li>Реализовал JWT-аутентификацию с refresh-токенами (ротация, отзыв); <b>нашёл и закрыл две IDOR-уязвимости</b> в WebSocket- и REST-эндпоинтах задач.</li>
+        <li>Спроектировал схему PostgreSQL и совместный task-менеджер с двусторонним подтверждением задач.</li>
+        <li>Настроил CI (GitHub Actions: lint, build, тесты с race-детектором, сканирование зависимостей) и контейнеризацию (Docker, non-root, healthcheck).</li>
+        <li>Написал кроссплатформенный клиент на Flutter (Windows / Web / Android) с Riverpod и real-time чатом; <b>60+ тестов</b>, отдельный CI-pipeline.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section>
+    <h2>Образование и языки</h2>
+    <dl class="rows">
+      <dt>Образование</dt><dd>Среднее специальное</dd>
+      <dt>Английский</dt><dd>C1 (Advanced), сертификат EF</dd>
+    </dl>
+  </section>
+
+</div>
+<script>
+  /* The phone number is never stored in this file: build.ps1 passes it in as resume.html#phone=... */
+  var m = location.hash.match(/phone=([^&]+)/);
+  document.querySelectorAll('.phone').forEach(function (e) { if (m) e.textContent = decodeURIComponent(m[1]); else e.remove(); });
+</script>
+</body>
+</html>

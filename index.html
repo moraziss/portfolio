@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вадим Грушин — Go-разработчик (Backend / DevOps)</title>
+  <meta name="description" content="Портфолио Вадима Грушина, Go-разработчика (Backend / DevOps) из Алматы: REST API, WebSocket, PostgreSQL, Redis, Docker, Kubernetes. Ищу стажировку или работу.">
+  <meta name="theme-color" content="#f5f7fa">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Вадим Грушин — Go-разработчик (Backend / DevOps)">
+  <meta property="og:description" content="Backend на Go: REST API, WebSocket, PostgreSQL, Redis, Docker, Kubernetes, CI/CD. Ищу стажировку или работу.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    /* Set theme before first paint to avoid a flash. Light is the default. */
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try { d.dataset.theme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'; }
+      catch (e) { d.dataset.theme = 'light'; }
+    })();
+  </script>
+</head>
+<body id="top">
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-14.93 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></symbol>
+    <symbol id="i-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#projects" data-i18n="skip">Перейти к проектам</a>
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <!-- Floating navigation -->
+  <header class="nav-wrap">
+    <div class="nav-pill">
+      <a class="brand" href="#top" aria-label="Vadim Grushin">
+        <span class="brand-mark">VG</span>
+        <span class="brand-name">Vadim Grushin</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main">
+        <a href="#projects" data-i18n="nav-projects">Проекты</a>
+        <a href="#stack" data-i18n="nav-stack">Стек</a>
+        <a href="#contact" data-i18n="nav-contact">Контакты</a>
+      </nav>
+
+      <div class="controls">
+        <div class="seg" role="group" data-i18n-aria="aria-lang" aria-label="Язык">
+          <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-pressed="false" data-i18n-aria="aria-theme" aria-label="Тёмная тема">
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <p class="status"><span class="dot" aria-hidden="true"></span><span data-i18n="status">Алматы · открыт к стажировке и работе</span></p>
+        <h1 data-i18n="name">Вадим <span class="grad">Грушин</span></h1>
+        <p class="role" data-i18n="role">Go-разработчик · Backend / DevOps</p>
+        <p class="lead" data-i18n="lead">Разрабатываю backend на Go: REST API и real-time сервисы на PostgreSQL, Redis и WebSocket. Покрываю тестами, упаковываю в Docker и разворачиваю в Kubernetes — с CI/CD и мониторингом.</p>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="assets/Grushin_Vadim_Go_Developer_RU.pdf" data-cv download>
+            <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
+            <span data-i18n="cta-cv">Резюме (PDF)</span>
+          </a>
+          <a class="btn btn-ghost" href="#contact" data-i18n="cta-contact">Связаться</a>
+          <span class="social">
+            <a class="btn-icon" href="https://github.com/moraziss" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg></a>
+            <a class="btn-icon" href="https://www.linkedin.com/in/vadim-grushin-0a9a0b392" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg></a>
+            <a class="btn-icon" href="https://t.me/moraziss" target="_blank" rel="noopener" aria-label="Telegram"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></a>
+          </span>
+        </div>
+
+        <ul class="meta">
+          <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="m-loc">Алматы, Казахстан</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg><span data-i18n="m-eng">English C1 · сертификат EF</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg><span data-i18n="m-edu">Среднее специальное</span></li>
+        </ul>
+      </div>
+
+      <!-- Signature visual: the path of a request through fintracker -->
+      <aside class="console" aria-labelledby="console-title">
+        <div class="console-bar">
+          <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <h2 class="console-title" id="console-title" data-i18n="con-title">fintracker · путь запроса</h2>
+        </div>
+        <ol class="trace">
+          <li class="tnode" style="--i:0"><span class="tdot"></span><span class="tname">client</span><span class="tsub" data-i18n="t-client">HTTPS-запрос</span></li>
+          <li class="tnode" style="--i:1"><span class="tdot"></span><span class="tname">nginx</span><span class="tsub">TLS · HTTPS</span></li>
+          <li class="tnode" style="--i:2"><span class="tdot"></span><span class="tname">handler</span><span class="tsub">JWT · rate limit</span></li>
+          <li class="tnode" style="--i:3"><span class="tdot"></span><span class="tname">service</span><span class="tsub" data-i18n="t-service">бизнес-логика</span><span class="tside">Redis · <span data-i18n="t-cache">кэш</span></span></li>
+          <li class="tnode" style="--i:4"><span class="tdot"></span><span class="tname">repository</span><span class="tsub" data-i18n="t-repo">pgx · транзакции</span></li>
+          <li class="tnode" style="--i:5"><span class="tdot"></span><span class="tname">PostgreSQL</span><span class="tsub" data-i18n="t-db">миграции · индексы</span></li>
+        </ol>
+        <p class="console-foot"><span data-i18n="con-mon">мониторинг</span> <b>Prometheus</b> → <b>Grafana</b> → <b>Alertmanager</b></p>
+      </aside>
+    </section>
+
+    <!-- Key facts -->
+    <section class="container">
+      <ul class="stats reveal">
+        <li><strong>2024</strong><span data-i18n="st1">Пишу на Go с 2024 года</span></li>
+        <li><strong>~20</strong><span data-i18n="st2">REST-эндпоинтов в мессенджере</span></li>
+        <li><strong>2</strong><span data-i18n="st3">IDOR-уязвимости найдены и закрыты</span></li>
+        <li><strong>60+</strong><span data-i18n="st4">тестов в Flutter-клиенте + отдельный CI</span></li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section class="section container" id="projects">
+      <p class="eyebrow reveal" data-i18n="p-eyebrow">01 · Проекты</p>
+      <h2 class="reveal" data-i18n="p-title">Что я сделал</h2>
+
+      <div class="projects">
+        <article class="project card spot reveal">
+          <header class="project-head">
+            <div>
+              <p class="kicker"><span data-i18n="p1-kind">Pet-проект · Backend</span><span class="sep">/</span><span data-i18n="p1-date">Январь 2025 — по настоящее время</span></p>
+              <h3>fintracker <span class="badge badge-wip" data-i18n="p1-badge">В разработке</span></h3>
+            </div>
+            <a class="link-btn" href="https://github.com/moraziss/fintracker" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+              <span data-i18n="p-code">Код на GitHub</span>
+              <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+            </a>
+          </header>
+
+          <p class="project-desc" data-i18n="p1-desc">Backend-сервис финансового трекера: аутентификация, операции с балансом и аналитические запросы. Проект в активной разработке.</p>
+
+          <div class="diagram">
+            <p class="diagram-label" data-i18n="p1-dlabel">От коммита до алерта</p>
+            <ol class="dflow">
+              <li data-a="→">git push</li>
+              <li data-a="→">lint</li>
+              <li data-a="→">test</li>
+              <li data-a="→">build</li>
+              <li data-a="→" class="hl">deploy</li>
+              <li data-a="→">Kubernetes · Helm</li>
+              <li>Prometheus · Grafana</li>
+            </ol>
+          </div>
+
+          <ul class="features">
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg></span>
+              <div><h4 data-i18n="p1-f1t">Архитектура и API</h4><p data-i18n="p1-f1">Три слоя: handler → service → repository. Миграции, индексы под аналитические запросы, эндпоинты описаны в OpenAPI.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+              <div><h4 data-i18n="p1-f2t">Безопасность и целостность</h4><p data-i18n="p1-f2">JWT с ротацией refresh-токенов, bcrypt. Операции с балансом атомарны благодаря транзакциям.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-zap"/></svg></span>
+              <div><h4 data-i18n="p1-f3t">Производительность</h4><p data-i18n="p1-f3">Кэширование и rate limiting на Redis для аналитических эндпоинтов. Нагрузочное тестирование k6, профилирование pprof.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-rocket"/></svg></span>
+              <div><h4 data-i18n="p1-f4t">Доставка и мониторинг</h4><p data-i18n="p1-f4">CI/CD на GitHub Actions, деплой на VPS (Nginx, HTTPS) и в Kubernetes через Helm. Prometheus и Grafana с алертами.</p></div>
+            </li>
+          </ul>
+
+          <ul class="tags" aria-label="Stack">
+            <li class="core">Go</li><li>PostgreSQL</li><li>Redis</li><li>Docker</li><li>Kubernetes</li><li>Helm</li><li>GitHub Actions</li><li>Prometheus</li><li>Grafana</li><li>k6</li>
+          </ul>
+        </article>
+
+        <article class="project card spot reveal">
+          <header class="project-head">
+            <div>
+              <p class="kicker"><span data-i18n="p2-kind">Pet-проект · Fullstack (Go + Flutter)</span><span class="sep">/</span><span data-i18n="p2-date">Май 2025 — по настоящее время</span></p>
+              <h3>Real-time Chat &amp; Task Manager</h3>
+            </div>
+            <a class="link-btn" href="https://github.com/moraziss/realtime_chat_app" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+              <span data-i18n="p-code">Код на GitHub</span>
+              <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+            </a>
+          </header>
+
+          <p class="project-desc" data-i18n="p2-desc">Мессенджер с совместным менеджером задач: backend на Go и кроссплатформенный клиент на Flutter.</p>
+
+          <div class="diagram">
+            <p class="diagram-label" data-i18n="p2-dlabel">Архитектура</p>
+            <ol class="dflow">
+              <li data-a="⇄" data-i18n="p2-d1">Flutter-клиент</li>
+              <li data-a="⇄" class="hl">REST + WebSocket</li>
+              <li data-a="⇄" data-i18n="p2-d2">Go-сервер</li>
+              <li>PostgreSQL</li>
+            </ol>
+          </div>
+
+          <ul class="features">
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-radio"/></svg></span>
+              <div><h4 data-i18n="p2-f1t">Real-time backend</h4><p data-i18n="p2-f1">~20 REST-эндпоинтов и WebSocket-канал: комнаты, онлайн-статус, прочтение, файлы, live-обновления задач.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+              <div><h4 data-i18n="p2-f2t">Безопасность</h4><p data-i18n="p2-f2">JWT с refresh-токенами (ротация, отзыв). Найдены и закрыты две IDOR-уязвимости в WebSocket- и REST-эндпоинтах задач.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-database"/></svg></span>
+              <div><h4 data-i18n="p2-f3t">Данные и домен</h4><p data-i18n="p2-f3">Схема PostgreSQL и совместный task-менеджер с двусторонним подтверждением задач.</p></div>
+            </li>
+            <li class="feature">
+              <span class="f-icon"><svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg></span>
+              <div><h4 data-i18n="p2-f4t">Качество и клиент</h4><p data-i18n="p2-f4">Тесты сервисов, хендлеров и WS-хаба; CI с race-детектором и сканированием зависимостей; Docker (non-root, healthcheck). Flutter-клиент на Riverpod (Windows / Web / Android), 60+ тестов.</p></div>
+            </li>
+          </ul>
+
+          <ul class="tags" aria-label="Stack">
+            <li class="core">Go</li><li>PostgreSQL</li><li>WebSocket</li><li>Docker</li><li>GitHub Actions</li><li>Flutter</li><li>Riverpod</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <section class="section container" id="stack">
+      <p class="eyebrow reveal" data-i18n="s-eyebrow">02 · Стек</p>
+      <h2 class="reveal" data-i18n="s-title">Чем я работаю</h2>
+
+      <div class="bento">
+        <div class="tile tile-go card spot reveal">
+          <span class="go-glyph" aria-hidden="true">Go</span>
+          <div>
+            <h3 data-i18n="sk-lang">Языки</h3>
+            <p class="tile-note" data-i18n="sk-go">Основной язык — Go, пишу на нём с 2024 года.</p>
+            <ul class="tags"><li class="core">Go</li><li>SQL</li><li>Bash</li></ul>
+          </div>
+        </div>
+
+        <div class="tile tile-backend card spot reveal">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-server"/></svg>Backend</h3>
+          <ul class="tags"><li>REST</li><li>gRPC</li><li>JWT</li><li>WebSocket</li><li>RabbitMQ / Kafka</li><li>pgx</li><li>testcontainers-go</li></ul>
+        </div>
+
+        <div class="tile tile-db card spot reveal">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-database"/></svg><span data-i18n="sk-db">Базы данных</span></h3>
+          <ul class="tags"><li>PostgreSQL</li><li>Redis</li></ul>
+        </div>
+
+        <div class="tile tile-qa card spot reveal">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg><span data-i18n="sk-qa">Качество</span></h3>
+          <ul class="tags"><li data-i18n="sk-tests">unit- и integration-тесты</li><li>k6</li><li>pprof</li><li>golangci-lint</li></ul>
+        </div>
+
+        <div class="tile tile-devops card spot reveal">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-rocket"/></svg>DevOps</h3>
+          <ul class="tags"><li>Docker</li><li>Kubernetes</li><li>Helm</li><li>GitHub Actions</li><li>GitLab CI</li><li>Nginx</li><li>Linux</li></ul>
+        </div>
+
+        <div class="tile tile-mon card spot reveal">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg><span data-i18n="sk-mon">Мониторинг</span></h3>
+          <ul class="tags"><li>Prometheus</li><li>Grafana</li><li>Alertmanager</li><li>Loki</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section container" id="contact">
+      <div class="cta reveal">
+        <div class="cta-copy">
+          <p class="eyebrow eyebrow-light" data-i18n="c-eyebrow">03 · Контакты</p>
+          <h2 data-i18n="c-title">Давайте поговорим</h2>
+          <p class="cta-text" data-i18n="c-text">Ищу стажировку или позицию Go-разработчика. Напишите на почту или в Telegram — буду рад обсудить.</p>
+          <a class="btn btn-light" href="assets/Grushin_Vadim_Go_Developer_RU.pdf" data-cv download>
+            <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
+            <span data-i18n="cta-cv">Резюме (PDF)</span>
+          </a>
+        </div>
+
+        <ul class="contact-list">
+          <li class="contact-row">
+            <a class="contact-item" href="mailto:grusinvadim55@gmail.com">
+              <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
+              <span class="contact-label"><small data-i18n="c-mail">Почта</small><span>grusinvadim55@gmail.com</span></span>
+            </a>
+            <button type="button" class="copy-btn" data-copy="grusinvadim55@gmail.com">
+              <svg class="icon icon-copy" aria-hidden="true"><use href="#i-copy"/></svg>
+              <svg class="icon icon-check" aria-hidden="true"><use href="#i-check"/></svg>
+              <span data-copy-label>Копировать</span>
+            </button>
+          </li>
+          <li>
+            <a class="contact-item" href="https://t.me/moraziss" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              <span class="contact-label"><small>Telegram</small><span>@moraziss</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="contact-item" href="https://www.linkedin.com/in/vadim-grushin-0a9a0b392" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg>
+              <span class="contact-label"><small>LinkedIn</small><span>in/vadim-grushin</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="contact-item" href="https://github.com/moraziss" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+              <span class="contact-label"><small>GitHub</small><span>github.com/moraziss</span></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container foot">
+      <span>© <span id="year">2026</span> <span data-i18n="name-plain">Вадим Грушин</span></span>
+      <a href="#top" data-i18n="to-top">Наверх ↑</a>
+    </div>
+  </footer>
+
+  <div class="sr-only" role="status" aria-live="polite" id="live"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
