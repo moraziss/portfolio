@@ -13,6 +13,8 @@ rich but accessible motion, and a one-page résumé built from the same source.
 ![Languages](https://img.shields.io/badge/lang-RU_%7C_EN-0b1220)
 ![Themes](https://img.shields.io/badge/theme-light_%7C_dark-0b1220)
 
+**Live: [vadimgrushin.dev](https://vadimgrushin.dev)**
+
 **English** · [Русский](#русская-версия)
 
 <br>
@@ -47,6 +49,7 @@ I'm a backend developer, so there is no product UI to screenshot. Instead the pa
 | **Light / dark** | Light by default, remembered per visitor, `?theme=dark` for sharing. Colors are design tokens in `style.css`. |
 | **Motion** | Staggered intro, scroll progress bar, parallax, count-up numbers, diagrams that "run" when scrolled into view, a sliding nav indicator with scroll-spy, magnetic buttons, a 3D-tilt hero card, eased anchor scrolling. The theme switch grows out of the toggle as a circle and the language switch is a blur cross-fade (View Transitions API). |
 | **Gentle mode** | Visitors whose OS asks for reduced motion get fades and glows only: slides, zoom, blur, parallax, tilt, loops and the big transitions are dropped (theme and language switches become a plain cross-fade). Add `?motion=full` to preview the full version regardless of the OS setting. |
+| **SEO & sharing** | Canonical URL, Open Graph and Twitter cards with a branded preview image (`assets/og-image.png`), schema.org `Person` (JSON-LD), `sitemap.xml`, `robots.txt` and a branded 404 page. |
 | **Responsive** | Phone-first layout, no horizontal scroll, tested from 375 px up. |
 | **Accessible** | Semantic landmarks, skip link, visible focus, `aria-pressed` toggles, content visible without JS. |
 | **Zero dependencies** | Plain HTML, CSS and JavaScript. Only Google Fonts (Manrope, JetBrains Mono) are loaded from outside. |
@@ -149,6 +152,8 @@ GitHub Pages, straight from the `main` branch:
 **Вадим Грушин — Go-разработчик · Backend / DevOps.** Быстрый личный сайт без зависимостей: два языка (RU / EN),
 светлая и тёмная темы, богатая, но доступная анимация и одностраничное резюме, собранное из тех же исходников.
 
+**Сайт: [vadimgrushin.dev](https://vadimgrushin.dev)**
+
 ### Что это
 
 Сайт, который я отправляю рекрутёрам и инженерам вместе с резюме. У него одна задача: за десять секунд
@@ -172,6 +177,7 @@ GitHub Pages, straight from the `main` branch:
 | **Светлая / тёмная тема** | По умолчанию светлая, выбор запоминается, `?theme=dark` для ссылки. Цвета — дизайн-токены в `style.css`. |
 | **Анимация** | Поэтапное появление, полоса прогресса прокрутки, параллакс, счётчики, схемы, которые «запускаются» при прокрутке, меню со скользящим индикатором и подсветкой раздела, магнитные кнопки, 3D-наклон карточки в первом экране, плавная прокрутка к якорям. Смена темы расходится кругом от переключателя, смена языка — размытое перетекание (View Transitions API). |
 | **Мягкий режим** | Если ОС посетителя просит уменьшить движение, остаются только плавные появления и подсветка: сдвиги, масштаб, размытие, параллакс, наклон, зацикленные эффекты и большие переходы отключаются (смена темы и языка становится обычным перетеканием). Параметр `?motion=full` показывает полную версию независимо от настройки ОС. |
+| **SEO и превью ссылок** | Канонический адрес, карточки Open Graph и Twitter с фирменной картинкой (`assets/og-image.png`), разметка schema.org `Person` (JSON-LD), `sitemap.xml`, `robots.txt` и своя страница 404. |
 | **Адаптивность** | Вёрстка от телефона, без горизонтальной прокрутки, проверена от 375 px. |
 | **Доступность** | Семантические блоки, skip-ссылка, видимый фокус, `aria-pressed`, содержимое видно без JS. |
 | **Без зависимостей** | Чистые HTML, CSS и JavaScript. Снаружи подгружаются только шрифты Google Fonts (Manrope, JetBrains Mono). |
@@ -181,12 +187,15 @@ GitHub Pages, straight from the `main` branch:
 
 ```
 .
-├── index.html           разметка и русский текст
+├── index.html           разметка и русский текст (+ Open Graph, JSON-LD)
+├── 404.html             страница «не найдено» для GitHub Pages
 ├── style.css            дизайн-токены, светлая/тёмная темы, вёрстка, анимации
 ├── main.js              английский словарь, переключение языка и темы, подсветка меню, анимации, копирование почты
-├── assets/              фавикон и публичные PDF резюме (RU / EN)
+├── robots.txt           правила для поисковых роботов
+├── sitemap.xml          карта сайта (один канонический адрес)
+├── assets/              фавикон, превью для соцсетей (og-image.png) и публичные PDF резюме (RU / EN)
 ├── resume/              исходники резюме (HTML + CSS) и скрипт сборки PDF
-├── scripts/             генератор скриншотов для этого README
+├── scripts/             screenshots.ps1 (картинки для README), og-image.py (превью для соцсетей)
 └── docs/screenshots/    картинки для README
 ```
 
