@@ -76,12 +76,15 @@ I'm a backend developer, so there is no product UI to screenshot. Instead the pa
 
 ```
 .
-├── index.html           markup and the Russian copy
+├── index.html           markup and the Russian copy (+ Open Graph, JSON-LD)
+├── 404.html             not-found page served by GitHub Pages
 ├── style.css            design tokens, light/dark themes, layout, motion
 ├── main.js              EN dictionary, language & theme switching, scroll-spy, animations, copy button
-├── assets/              favicon and the public résumé PDFs (RU / EN)
+├── robots.txt           crawler rules
+├── sitemap.xml          sitemap (single canonical URL)
+├── assets/              favicon, social preview (og-image.png) and the public résumé PDFs (RU / EN)
 ├── resume/              résumé sources (HTML + CSS) and the PDF build script
-├── scripts/             screenshot generator for this README
+├── scripts/             screenshots.ps1 (README images), og-image.py (social preview)
 └── docs/screenshots/    images used in this README
 ```
 
