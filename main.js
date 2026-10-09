@@ -2,6 +2,10 @@
   'use strict';
 
   const root = document.documentElement;
+  // Honour the OS setting, unless the owner previews with ?motion=full.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !root.classList.contains('force-motion');
+  const canHover = window.matchMedia('(hover: hover)').matches;
 
   const store = {
     get(key) { try { return localStorage.getItem(key); } catch { return null; } },
@@ -21,7 +25,7 @@
     'aria-theme': 'Dark theme',
 
     'status': 'Almaty · open to internships and full-time roles',
-    'name': 'Vadim <span class="grad">Grushin</span>',
+    'name': '<span class="mask" style="--m: 0"><span>Vadim</span></span> <span class="mask" style="--m: 1"><span class="grad">Grushin</span></span>',
     'name-plain': 'Vadim Grushin',
     'role': 'Go Developer · Backend / DevOps',
     'lead': 'I build backend services in Go: REST APIs and real-time systems on PostgreSQL, Redis and WebSocket. I cover them with tests, ship them in Docker and deploy to Kubernetes — with CI/CD and monitoring.',
@@ -153,6 +157,7 @@
     ogTitle?.setAttribute('content', META[next].title);
     langButtons.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.lang === next)));
     if (copyLabel && !copyBtn?.classList.contains('is-copied')) copyLabel.textContent = UI[next].copy;
+    placeIndicator(activeLink(), false); // link widths change with the language
 
     if (persist) {
       store.set('lang', next);
@@ -172,8 +177,40 @@
     return /^(ru|kk)\b/i.test(navigator.language || '') ? 'ru' : 'en';
   }
 
+  /* ------------------------------------------------------------------
+     View Transitions: the theme switch grows out of the toggle as a circle,
+     the language switch cross-fades with a blur. Falls back to an instant
+     change where the API is missing or motion is reduced.
+     ------------------------------------------------------------------ */
+  function transition(update, { type, origin } = {}) {
+    if (reduceMotion || !document.startViewTransition) { update(); return; }
+
+    root.dataset.vt = type;
+    const vt = document.startViewTransition(update);
+    // A skipped transition (e.g. the tab is hidden) rejects these promises; the page still updates.
+    vt.ready.catch(() => {});
+    vt.updateCallbackDone.catch(() => {});
+
+    if (type === 'theme' && origin) {
+      vt.ready.then(() => {
+        const radius = Math.hypot(
+          Math.max(origin.x, window.innerWidth - origin.x),
+          Math.max(origin.y, window.innerHeight - origin.y),
+        );
+        root.animate(
+          { clipPath: [`circle(0px at ${origin.x}px ${origin.y}px)`, `circle(${radius}px at ${origin.x}px ${origin.y}px)`] },
+          { duration: 750, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', pseudoElement: '::view-transition-new(root)' },
+        );
+      }).catch(() => {});
+    }
+    vt.finished.catch(() => {}).finally(() => { delete root.dataset.vt; });
+  }
+
   langButtons.forEach((btn) => {
-    btn.addEventListener('click', () => setLang(btn.dataset.lang, { persist: true }));
+    btn.addEventListener('click', () => {
+      if (btn.dataset.lang === lang) return;
+      transition(() => setLang(btn.dataset.lang, { persist: true }), { type: 'lang' });
+    });
   });
 
   /* ---------- Theme (light by default) ---------- */
@@ -188,9 +225,12 @@
 
   themeBtn.addEventListener('click', () => {
     const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    store.set('theme', next);
-    syncTheme();
+    const rect = themeBtn.getBoundingClientRect();
+    transition(() => {
+      root.dataset.theme = next;
+      store.set('theme', next);
+      syncTheme();
+    }, { type: 'theme', origin: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 } });
   });
 
   /* ---------- Copy e-mail ---------- */
@@ -227,26 +267,82 @@
     }, 1800);
   });
 
-  /* ---------- Reveal on scroll ---------- */
+  /* ------------------------------------------------------------------
+     Motion
+     ------------------------------------------------------------------ */
+
+  // Stagger index for list children (read by the CSS as --i).
+  document.querySelectorAll('.features, .tags, .stats, .dflow, .trace').forEach((list) => {
+    [...list.children].forEach((child, i) => child.style.setProperty('--i', i));
+  });
+
+  // Numbers count up when the strip scrolls into view.
+  function countUp(el) {
+    if (reduceMotion) return;
+    const to = Number(el.dataset.count);
+    const from = Number(el.dataset.from || 0);
+    const pre = el.dataset.pre || '';
+    const post = el.dataset.post || '';
+    const start = performance.now();
+    const render = (value) => { el.textContent = `${pre}${Math.round(value)}${post}`; };
+    render(from);
+    const tick = (now) => {
+      const k = Math.min(1, (now - start) / 1500);
+      render(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // Reveal on scroll.
   const revealNodes = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         entry.target.classList.add('is-in');
+        entry.target.querySelectorAll('[data-count]').forEach(countUp);
         io.unobserve(entry.target);
       }
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
     revealNodes.forEach((el) => io.observe(el));
+
+    // Diagrams play their "run" animation once they are mostly visible.
+    const diagramIo = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('run');
+        diagramIo.unobserve(entry.target);
+      }
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.diagram').forEach((el) => diagramIo.observe(el));
   } else {
     revealNodes.forEach((el) => el.classList.add('is-in'));
+    document.querySelectorAll('.diagram').forEach((el) => el.classList.add('run'));
   }
 
-  /* ---------- Scroll-spy for the nav ---------- */
+  /* ---------- Navigation: scroll-spy with a sliding indicator ---------- */
+  const navWrap = document.querySelector('.nav-links');
+  const indicator = document.querySelector('.nav-indicator');
   const navLinks = [...document.querySelectorAll('.nav-links a')];
   const spyTargets = navLinks
     .map((a) => document.querySelector(a.getAttribute('href')))
     .filter(Boolean);
+
+  const activeLink = () => navLinks.find((a) => a.getAttribute('aria-current') === 'true');
+
+  function placeIndicator(target, animate = true) {
+    if (!indicator) return;
+    if (!target || !target.offsetWidth) { indicator.style.opacity = '0'; return; }
+    // The first placement (from "hidden") jumps instead of sliding in from the left edge.
+    navWrap.classList.toggle('no-anim', !animate || indicator.style.opacity !== '1');
+    indicator.style.width = `${target.offsetWidth}px`;
+    indicator.style.transform = `translateX(${target.offsetLeft}px)`;
+    indicator.style.opacity = '1';
+  }
+
+  navLinks.forEach((a) => a.addEventListener('pointerenter', () => placeIndicator(a)));
+  navWrap?.addEventListener('pointerleave', () => placeIndicator(activeLink()));
 
   function updateSpy() {
     const line = window.innerHeight * 0.35;
@@ -259,12 +355,102 @@
       if (active) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
+    if (!navWrap?.matches(':hover')) placeIndicator(activeLink());
   }
-  window.addEventListener('scroll', updateSpy, { passive: true });
-  window.addEventListener('resize', updateSpy);
+
+  /* ---------- Scroll: progress bar, parallax, spy ---------- */
+  const progressBar = document.querySelector('.scroll-progress');
+  const heroBg = document.querySelector('.hero-bg');
+  const consoleEl = document.querySelector('.console');
+  let scrollTicking = false;
+
+  function onScroll() {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      const max = root.scrollHeight - window.innerHeight;
+      if (progressBar) progressBar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max).toFixed(4) : 0})`;
+      if (!reduceMotion && y < 1400) {
+        if (heroBg) heroBg.style.transform = `translate3d(0, ${(y * 0.18).toFixed(1)}px, 0)`;
+        if (consoleEl) consoleEl.style.translate = `0 ${(-y * 0.05).toFixed(1)}px`;
+      }
+      updateSpy();
+      scrollTicking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => { placeIndicator(activeLink(), false); onScroll(); });
+
+  /* ---------- Smooth, eased scrolling to in-page anchors ---------- */
+  let scrollToken = 0;
+  ['wheel', 'touchstart', 'keydown'].forEach((type) => {
+    window.addEventListener(type, () => { scrollToken += 1; }, { passive: true });
+  });
+
+  document.addEventListener('click', (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
+    if (!link || reduceMotion || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    const id = link.getAttribute('href').slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+
+    event.preventDefault();
+    const offset = id === 'top' ? 0 : parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    const from = window.scrollY;
+    const to = Math.max(0, id === 'top' ? 0 : target.getBoundingClientRect().top + from - offset);
+    const distance = Math.abs(to - from);
+    const duration = Math.min(1100, 450 + distance * 0.3);
+    const token = ++scrollToken;
+    const start = performance.now();
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    const step = (now) => {
+      if (token !== scrollToken) return; // the user took over
+      const k = Math.min(1, (now - start) / duration);
+      window.scrollTo({ top: from + (to - from) * ease(k), behavior: 'instant' });
+      if (k < 1) { requestAnimationFrame(step); return; }
+      try { history.pushState(null, '', `#${id}`); } catch { /* ignore */ }
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    };
+    requestAnimationFrame(step);
+  });
+
+  /* ---------- Hero console: 3D tilt with a glare ---------- */
+  if (consoleEl && canHover && !reduceMotion) {
+    consoleEl.addEventListener('pointermove', (event) => {
+      const rect = consoleEl.getBoundingClientRect();
+      const px = (event.clientX - rect.left) / rect.width;
+      const py = (event.clientY - rect.top) / rect.height;
+      consoleEl.classList.add('is-tilting');
+      consoleEl.style.setProperty('--ry', `${((px - 0.5) * 10).toFixed(2)}deg`);
+      consoleEl.style.setProperty('--rx', `${((0.5 - py) * 8).toFixed(2)}deg`);
+      consoleEl.style.setProperty('--gx', `${(px * 100).toFixed(1)}%`);
+      consoleEl.style.setProperty('--gy', `${(py * 100).toFixed(1)}%`);
+    });
+    consoleEl.addEventListener('pointerleave', () => consoleEl.classList.remove('is-tilting'));
+  }
+
+  /* ---------- Magnetic buttons ---------- */
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll('.hero .btn, .hero .btn-icon, .link-btn, .btn-light').forEach((el) => {
+      el.addEventListener('pointermove', (event) => {
+        const rect = el.getBoundingClientRect();
+        const dx = event.clientX - (rect.left + rect.width / 2);
+        const dy = event.clientY - (rect.top + rect.height / 2);
+        el.style.transition = 'transform 0.12s linear';
+        el.style.transform = `translate(${(dx * 0.22).toFixed(1)}px, ${(dy * 0.3).toFixed(1)}px)`;
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.transition = '';
+        el.style.transform = '';
+      });
+    });
+  }
 
   /* ---------- Cursor spotlight on cards ---------- */
-  if (window.matchMedia('(hover: hover)').matches) {
+  if (canHover) {
     document.addEventListener('pointermove', (event) => {
       const card = event.target instanceof Element ? event.target.closest('.spot') : null;
       if (!card) return;
@@ -278,5 +464,14 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   syncTheme();
   setLang(detectLang());
-  updateSpy();
+  onScroll();
+
+  // Start the intro once the fonts are in (but never hold the page back for more than half a second).
+  const fontsReady = document.fonts
+    ? Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, 500))])
+    : Promise.resolve();
+  fontsReady.then(() => setTimeout(() => {
+    root.classList.add('is-ready');
+    setTimeout(() => root.classList.add('intro-done'), reduceMotion ? 0 : 2800);
+  }, 30));
 })();

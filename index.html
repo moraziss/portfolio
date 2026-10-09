@@ -19,7 +19,9 @@
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
-      var param = new URLSearchParams(location.search).get('theme');
+      var query = new URLSearchParams(location.search);
+      if (query.get('motion') === 'full') d.classList.add('force-motion'); /* preview animations even if the OS asks for reduced motion */
+      var param = query.get('theme');
       try { d.dataset.theme = (param || localStorage.getItem('theme')) === 'dark' ? 'dark' : 'light'; }
       catch (e) { d.dataset.theme = param === 'dark' ? 'dark' : 'light'; }
     })();
@@ -56,16 +58,18 @@
 
   <a class="skip-link" href="#projects" data-i18n="skip">Перейти к проектам</a>
   <div class="hero-bg" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- Floating navigation -->
   <header class="nav-wrap">
-    <div class="nav-pill">
+    <div class="nav-pill intro">
       <a class="brand" href="#top" aria-label="Vadim Grushin">
         <span class="brand-mark">VG</span>
         <span class="brand-name">Vadim Grushin</span>
       </a>
 
       <nav class="nav-links" aria-label="Main">
+        <span class="nav-indicator" aria-hidden="true"></span>
         <a href="#projects" data-i18n="nav-projects">Проекты</a>
         <a href="#stack" data-i18n="nav-stack">Стек</a>
         <a href="#contact" data-i18n="nav-contact">Контакты</a>
@@ -88,12 +92,12 @@
     <!-- Hero -->
     <section class="hero container">
       <div class="hero-copy">
-        <p class="status"><span class="dot" aria-hidden="true"></span><span data-i18n="status">Алматы · открыт к стажировке и работе</span></p>
-        <h1 data-i18n="name">Вадим <span class="grad">Грушин</span></h1>
-        <p class="role" data-i18n="role">Go-разработчик · Backend / DevOps</p>
-        <p class="lead" data-i18n="lead">Разрабатываю backend на Go: REST API и real-time сервисы на PostgreSQL, Redis и WebSocket. Покрываю тестами, упаковываю в Docker и разворачиваю в Kubernetes — с CI/CD и мониторингом.</p>
+        <p class="status intro" style="--d: 0.05s"><span class="dot" aria-hidden="true"></span><span data-i18n="status">Алматы · открыт к стажировке и работе</span></p>
+        <h1 data-i18n="name"><span class="mask" style="--m: 0"><span>Вадим</span></span> <span class="mask" style="--m: 1"><span class="grad">Грушин</span></span></h1>
+        <p class="role intro" style="--d: 0.4s" data-i18n="role">Go-разработчик · Backend / DevOps</p>
+        <p class="lead intro" style="--d: 0.5s" data-i18n="lead">Разрабатываю backend на Go: REST API и real-time сервисы на PostgreSQL, Redis и WebSocket. Покрываю тестами, упаковываю в Docker и разворачиваю в Kubernetes — с CI/CD и мониторингом.</p>
 
-        <div class="actions">
+        <div class="actions intro" style="--d: 0.62s">
           <a class="btn btn-primary" href="assets/Grushin_Vadim_Go_Developer_RU.pdf" data-cv download>
             <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
             <span data-i18n="cta-cv">Резюме (PDF)</span>
@@ -106,7 +110,7 @@
           </span>
         </div>
 
-        <ul class="meta">
+        <ul class="meta intro" style="--d: 0.74s">
           <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="m-loc">Алматы, Казахстан</span></li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg><span data-i18n="m-eng">English C1 · сертификат EF</span></li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg><span data-i18n="m-edu">Среднее специальное</span></li>
@@ -114,7 +118,7 @@
       </div>
 
       <!-- Signature visual: the path of a request through fintracker -->
-      <aside class="console" aria-labelledby="console-title">
+      <aside class="console intro" style="--d: 0.3s" aria-labelledby="console-title">
         <div class="console-bar">
           <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
           <h2 class="console-title" id="console-title" data-i18n="con-title">fintracker · путь запроса</h2>
@@ -134,10 +138,10 @@
     <!-- Key facts -->
     <section class="container">
       <ul class="stats reveal">
-        <li><strong>2024</strong><span data-i18n="st1">Пишу на Go с 2024 года</span></li>
-        <li><strong>~20</strong><span data-i18n="st2">REST-эндпоинтов в мессенджере</span></li>
-        <li><strong>2</strong><span data-i18n="st3">IDOR-уязвимости найдены и закрыты</span></li>
-        <li><strong>60+</strong><span data-i18n="st4">тестов в Flutter-клиенте + отдельный CI</span></li>
+        <li><strong data-count="2024" data-from="2000">2024</strong><span data-i18n="st1">Пишу на Go с 2024 года</span></li>
+        <li><strong data-count="20" data-pre="~">~20</strong><span data-i18n="st2">REST-эндпоинтов в мессенджере</span></li>
+        <li><strong data-count="2">2</strong><span data-i18n="st3">IDOR-уязвимости найдены и закрыты</span></li>
+        <li><strong data-count="60" data-post="+">60+</strong><span data-i18n="st4">тестов в Flutter-клиенте + отдельный CI</span></li>
       </ul>
     </section>
 

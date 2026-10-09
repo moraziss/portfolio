@@ -884,9 +884,185 @@ h1 {
 }
 .js .reveal.is-in { opacity: 1; transform: none; }
 
+/* =====================================================================
+   Motion: intro, scroll choreography, view transitions.
+   Pure progressive enhancement. Without JS everything is visible, and
+   prefers-reduced-motion switches all of it off (see the end of this block).
+   ===================================================================== */
+
+/* ---- Scroll progress bar ---- */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-bright), #6366f1);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+.hero-bg { will-change: transform; }
+
+/* ---- Intro choreography (JS adds .is-ready, then .intro-done) ---- */
+@keyframes intro-fallback { to { opacity: 1; } }
+@keyframes mask-fallback { to { translate: 0 0; } }
+@keyframes intro      { from { opacity: 0; translate: 0 28px;  filter: blur(8px); }  to { opacity: 1; translate: 0 0; filter: blur(0); } }
+@keyframes intro-down { from { opacity: 0; translate: 0 -24px; filter: blur(6px); }  to { opacity: 1; translate: 0 0; filter: blur(0); } }
+@keyframes intro-console {
+  from { opacity: 0; translate: 0 48px; scale: 0.94; filter: blur(10px); }
+  to   { opacity: 1; translate: 0 0;    scale: 1;    filter: blur(0); }
+}
+@keyframes mask-up { from { translate: 0 112%; } to { translate: 0 0; } }
+@keyframes t-in    { from { opacity: 0; translate: -14px 0; } to { opacity: 1; translate: 0 0; } }
+
+.js .intro { opacity: 0; animation: intro-fallback 0s 2.5s forwards; }
+.is-ready .intro { animation: intro 0.95s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) both; }
+.is-ready .nav-pill.intro { animation-name: intro-down; }
+.is-ready .console.intro { animation-name: intro-console; animation-duration: 1.25s; }
+
+/* The headline is revealed word by word from under a mask. */
+.mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.03em 0.14em;
+  margin: 0 -0.03em -0.14em;
+}
+.mask > span { display: inline-block; }
+.js .mask > span { translate: 0 112%; animation: mask-fallback 0s 2.5s forwards; }
+.is-ready .mask > span { animation: mask-up 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) calc(0.12s + var(--m, 0) * 0.14s) both; }
+
+/* The trace in the console boots node by node. */
+.js .tnode { opacity: 0; animation: intro-fallback 0s 2.5s forwards; }
+.is-ready .tnode { animation: t-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.65s + var(--i, 0) * 0.09s) both; }
+
+/* Once the intro has played, drop the animations so hover/tilt/parallax can take over. */
+.intro-done .intro,
+.intro-done .tnode { animation: none !important; opacity: 1 !important; filter: none !important; }
+.intro-done .mask > span { animation: none !important; translate: 0 0 !important; }
+
+/* ---- Section titles rise and come into focus ----
+   (No clip-path on the title itself: IntersectionObserver would see an empty box and never reveal it.) */
+.js h2.reveal {
+  opacity: 0;
+  transform: translateY(0.45em);
+  filter: blur(10px);
+  transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.9s ease;
+}
+.js h2.reveal.is-in { opacity: 1; transform: none; filter: blur(0); }
+
+/* ---- Cards: lift in, then stagger their contents ---- */
+.js .card.reveal {
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.25s;
+}
+.js .project.reveal { transform: translateY(32px) scale(0.985); }
+.js .project.reveal.is-in { transform: none; }
+
+@keyframes rise { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0 0; } }
+@keyframes pop  { from { opacity: 0; translate: 0 6px; scale: 0.9; } to { opacity: 1; translate: 0 0; scale: 1; } }
+
+.js .reveal:not(.is-in) .feature,
+.js .reveal:not(.is-in) .tags li,
+.js .stats:not(.is-in) li { opacity: 0; }
+
+.reveal.is-in .feature { animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.2s + var(--i, 0) * 90ms) both; }
+.reveal.is-in .tags li { animation: pop 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) calc(0.45s + var(--i, 0) * 35ms) both; }
+.stats.is-in li        { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 110ms) both; }
+.feature:hover { transform: translateY(-3px); }
+.feature { transition: border-color 0.2s, background 0.2s, transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.stats strong { font-variant-numeric: tabular-nums; }
+
+/* ---- Diagrams "run" when scrolled into view ---- */
+@keyframes node-in {
+  0%   { opacity: 0; transform: translateY(10px) scale(0.92); }
+  55%  { opacity: 1; transform: none; border-color: rgb(34 211 238 / 0.9); box-shadow: 0 0 0 4px rgb(34 211 238 / 0.15), 0 0 22px rgb(34 211 238 / 0.5); }
+  100% { opacity: 1; transform: none; box-shadow: none; }
+}
+.js .diagram:not(.run) .dflow li { opacity: 0; }
+.diagram.run .dflow li { animation: node-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 120ms) both; }
+
+/* ---- Navigation: a sliding indicator instead of snapping backgrounds ---- */
+.nav-links { position: relative; }
+.nav-links a { position: relative; z-index: 1; }
+.nav-links a[aria-current="true"] { background: transparent; }
+.nav-indicator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 0;
+  width: 0;
+  height: 36px;
+  margin-top: -18px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s;
+}
+.nav-links.no-anim .nav-indicator { transition: opacity 0.25s; }
+
+/* ---- Console: 3D tilt with a glare that follows the pointer ---- */
+.console { transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.console.is-tilting {
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.12s linear;
+}
+.console::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(360px circle at var(--gx, 50%) var(--gy, 0%), rgb(255 255 255 / 0.09), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.console:hover::after { opacity: 1; }
+
+/* ---- Magnetic buttons spring back with a little overshoot ---- */
+.hero .btn, .hero .btn-icon, .link-btn, .btn-light {
+  transition: transform 0.55s cubic-bezier(0.2, 1.4, 0.4, 1), background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+/* ---- View Transitions: theme = circular reveal, language = blur cross-fade ---- */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+@keyframes vt-out { to { opacity: 0; filter: blur(8px); } }
+@keyframes vt-in  { from { opacity: 0; filter: blur(8px); } }
+[data-vt="lang"]::view-transition-old(root) { animation: vt-out 0.3s ease both; }
+[data-vt="lang"]::view-transition-new(root) { animation: vt-in 0.45s ease both; }
+
+/* ---- Reduced motion: everything above is switched off ----
+   (?motion=full puts .force-motion on <html> so the owner can still preview the animations.) */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .js .reveal { opacity: 1; transform: none; transition: none; }
-  .dot, .hero-bg::after, .tdot, .tnode::after { animation: none; }
-  .tdot { border-color: var(--panel-accent); }
+  html:not(.force-motion) { scroll-behavior: auto; }
+  .js:not(.force-motion) .reveal { opacity: 1; transform: none; transition: none; }
+  .js:not(.force-motion) .dot,
+  .js:not(.force-motion) .hero-bg::after,
+  .js:not(.force-motion) .tdot,
+  .js:not(.force-motion) .tnode::after { animation: none; }
+  .js:not(.force-motion) .tdot { border-color: var(--panel-accent); }
+
+  .js:not(.force-motion) .intro,
+  .js:not(.force-motion) .tnode { opacity: 1; animation: none; }
+  .js:not(.force-motion) .mask > span { translate: 0 0; animation: none; }
+  .js:not(.force-motion) h2.reveal { opacity: 1; filter: none; transform: none; transition: none; }
+  .js:not(.force-motion) .project.reveal { transform: none; }
+  .js:not(.force-motion) .reveal:not(.is-in) .feature,
+  .js:not(.force-motion) .reveal:not(.is-in) .tags li,
+  .js:not(.force-motion) .stats:not(.is-in) li,
+  .js:not(.force-motion) .diagram:not(.run) .dflow li { opacity: 1; }
+  .js:not(.force-motion) .reveal.is-in .feature,
+  .js:not(.force-motion) .reveal.is-in .tags li,
+  .js:not(.force-motion) .stats.is-in li,
+  .js:not(.force-motion) .diagram.run .dflow li { animation: none; }
+  .js:not(.force-motion) .console,
+  .js:not(.force-motion) .console.is-tilting { transform: none; }
+  .js:not(.force-motion) .feature:hover { transform: none; }
+  :root:not(.force-motion)::view-transition-group(*),
+  :root:not(.force-motion)::view-transition-old(*),
+  :root:not(.force-motion)::view-transition-new(*) { animation: none !important; }
 }
