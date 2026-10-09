@@ -2,7 +2,8 @@
   'use strict';
 
   const root = document.documentElement;
-  // Honour the OS setting, unless the owner previews with ?motion=full.
+  // "Gentle mode": when the OS asks for reduced motion, fades and glows stay but nothing moves
+  // (no parallax, tilt, magnetic buttons, eased scrolling or big transitions). ?motion=full previews the full version.
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     && !root.classList.contains('force-motion');
   const canHover = window.matchMedia('(hover: hover)').matches;
@@ -183,15 +184,17 @@
      change where the API is missing or motion is reduced.
      ------------------------------------------------------------------ */
   function transition(update, { type, origin } = {}) {
-    if (reduceMotion || !document.startViewTransition) { update(); return; }
+    if (!document.startViewTransition) { update(); return; }
 
-    root.dataset.vt = type;
+    // Gentle mode (the OS asks for reduced motion): a plain cross-fade, no circle and no blur.
+    const kind = reduceMotion ? 'fade' : type;
+    root.dataset.vt = kind;
     const vt = document.startViewTransition(update);
     // A skipped transition (e.g. the tab is hidden) rejects these promises; the page still updates.
     vt.ready.catch(() => {});
     vt.updateCallbackDone.catch(() => {});
 
-    if (type === 'theme' && origin) {
+    if (kind === 'theme' && origin) {
       vt.ready.then(() => {
         const radius = Math.hypot(
           Math.max(origin.x, window.innerWidth - origin.x),
@@ -278,7 +281,6 @@
 
   // Numbers count up when the strip scrolls into view.
   function countUp(el) {
-    if (reduceMotion) return;
     const to = Number(el.dataset.count);
     const from = Number(el.dataset.from || 0);
     const pre = el.dataset.pre || '';
@@ -472,6 +474,6 @@
     : Promise.resolve();
   fontsReady.then(() => setTimeout(() => {
     root.classList.add('is-ready');
-    setTimeout(() => root.classList.add('intro-done'), reduceMotion ? 0 : 2800);
+    setTimeout(() => root.classList.add('intro-done'), 2800);
   }, 30));
 })();

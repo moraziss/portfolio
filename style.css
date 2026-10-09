@@ -940,7 +940,7 @@ h1 {
 /* Once the intro has played, drop the animations so hover/tilt/parallax can take over. */
 .intro-done .intro,
 .intro-done .tnode { animation: none !important; opacity: 1 !important; filter: none !important; }
-.intro-done .mask > span { animation: none !important; translate: 0 0 !important; }
+.intro-done .mask > span { animation: none !important; translate: 0 0 !important; opacity: 1 !important; }
 
 /* ---- Section titles rise and come into focus ----
    (No clip-path on the title itself: IntersectionObserver would see an empty box and never reveal it.) */
@@ -1035,34 +1035,53 @@ h1 {
 [data-vt="lang"]::view-transition-old(root) { animation: vt-out 0.3s ease both; }
 [data-vt="lang"]::view-transition-new(root) { animation: vt-in 0.45s ease both; }
 
-/* ---- Reduced motion: everything above is switched off ----
-   (?motion=full puts .force-motion on <html> so the owner can still preview the animations.) */
+/* ---- Reduced motion: "gentle mode" ----
+   Visitors whose OS asks for reduced motion keep the fades and glows but lose everything
+   that moves: slides, zoom, blur, parallax, tilt, loops and big transitions.
+   ?motion=full puts .force-motion on <html> to preview the full version anyway. */
 @media (prefers-reduced-motion: reduce) {
+  @keyframes g-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes g-node {
+    0%   { opacity: 0; }
+    55%  { opacity: 1; border-color: rgb(34 211 238 / 0.9); box-shadow: 0 0 0 4px rgb(34 211 238 / 0.15), 0 0 22px rgb(34 211 238 / 0.5); }
+    100% { opacity: 1; box-shadow: none; }
+  }
+  @keyframes g-vt-out { to { opacity: 0; } }
+  @keyframes g-vt-in  { from { opacity: 0; } }
+
   html:not(.force-motion) { scroll-behavior: auto; }
-  .js:not(.force-motion) .reveal { opacity: 1; transform: none; transition: none; }
+
+  /* looping and pulsing decoration stays off */
   .js:not(.force-motion) .dot,
   .js:not(.force-motion) .hero-bg::after,
   .js:not(.force-motion) .tdot,
   .js:not(.force-motion) .tnode::after { animation: none; }
   .js:not(.force-motion) .tdot { border-color: var(--panel-accent); }
 
-  .js:not(.force-motion) .intro,
-  .js:not(.force-motion) .tnode { opacity: 1; animation: none; }
-  .js:not(.force-motion) .mask > span { translate: 0 0; animation: none; }
-  .js:not(.force-motion) h2.reveal { opacity: 1; filter: none; transform: none; transition: none; }
+  /* intro: fade only (same delays and durations, no translate / scale / blur) */
+  .is-ready:not(.force-motion) .intro,
+  .is-ready:not(.force-motion) .nav-pill.intro,
+  .is-ready:not(.force-motion) .console.intro,
+  .is-ready:not(.force-motion) .tnode { animation-name: g-fade; }
+  .js:not(.force-motion) .mask > span { translate: 0 0; opacity: 0; animation: intro-fallback 0s 2.5s forwards; }
+  .is-ready:not(.force-motion) .mask > span { animation: g-fade 1s ease calc(0.12s + var(--m, 0) * 0.14s) both; }
+
+  /* scroll reveals: fade only */
+  .js:not(.force-motion) .reveal,
   .js:not(.force-motion) .project.reveal { transform: none; }
-  .js:not(.force-motion) .reveal:not(.is-in) .feature,
-  .js:not(.force-motion) .reveal:not(.is-in) .tags li,
-  .js:not(.force-motion) .stats:not(.is-in) li,
-  .js:not(.force-motion) .diagram:not(.run) .dflow li { opacity: 1; }
+  .js:not(.force-motion) h2.reveal { transform: none; filter: none; transition: opacity 0.8s ease; }
   .js:not(.force-motion) .reveal.is-in .feature,
   .js:not(.force-motion) .reveal.is-in .tags li,
-  .js:not(.force-motion) .stats.is-in li,
-  .js:not(.force-motion) .diagram.run .dflow li { animation: none; }
+  .js:not(.force-motion) .stats.is-in li { animation-name: g-fade; }
+  .js:not(.force-motion) .diagram.run .dflow li { animation-name: g-node; }
+
+  /* no tilt, no hover lift, no sliding nav indicator */
   .js:not(.force-motion) .console,
   .js:not(.force-motion) .console.is-tilting { transform: none; }
   .js:not(.force-motion) .feature:hover { transform: none; }
-  :root:not(.force-motion)::view-transition-group(*),
-  :root:not(.force-motion)::view-transition-old(*),
-  :root:not(.force-motion)::view-transition-new(*) { animation: none !important; }
+  .js:not(.force-motion) .nav-indicator { transition: opacity 0.25s; }
+
+  /* theme and language switches: a plain cross-fade */
+  :root:not(.force-motion)[data-vt]::view-transition-old(root) { animation: g-vt-out 0.25s ease both !important; }
+  :root:not(.force-motion)[data-vt]::view-transition-new(root) { animation: g-vt-in 0.35s ease both !important; }
 }

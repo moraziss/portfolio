@@ -46,7 +46,7 @@ I'm a backend developer, so there is no product UI to screenshot. Instead the pa
 | **Bilingual** | Russian copy lives in the HTML (works without JS, readable by crawlers); the English dictionary is in `main.js`. Deep links: `?lang=en`, `?lang=ru`. |
 | **Light / dark** | Light by default, remembered per visitor, `?theme=dark` for sharing. Colors are design tokens in `style.css`. |
 | **Motion** | Staggered intro, scroll progress bar, parallax, count-up numbers, diagrams that "run" when scrolled into view, a sliding nav indicator with scroll-spy, magnetic buttons, a 3D-tilt hero card, eased anchor scrolling. The theme switch grows out of the toggle as a circle and the language switch is a blur cross-fade (View Transitions API). |
-| **Reduced motion** | Everything above is switched off for visitors who ask for reduced motion; the page is then fully static. Add `?motion=full` to preview the animations regardless of the OS setting. |
+| **Gentle mode** | Visitors whose OS asks for reduced motion get fades and glows only: slides, zoom, blur, parallax, tilt, loops and the big transitions are dropped (theme and language switches become a plain cross-fade). Add `?motion=full` to preview the full version regardless of the OS setting. |
 | **Responsive** | Phone-first layout, no horizontal scroll, tested from 375 px up. |
 | **Accessible** | Semantic landmarks, skip link, visible focus, `aria-pressed` toggles, content visible without JS. |
 | **Zero dependencies** | Plain HTML, CSS and JavaScript. Only Google Fonts (Manrope, JetBrains Mono) are loaded from outside. |
@@ -171,7 +171,7 @@ GitHub Pages, straight from the `main` branch:
 | **Два языка** | Русский текст лежит в HTML (работает без JS, виден поисковикам), английский словарь — в `main.js`. Прямые ссылки: `?lang=en`, `?lang=ru`. |
 | **Светлая / тёмная тема** | По умолчанию светлая, выбор запоминается, `?theme=dark` для ссылки. Цвета — дизайн-токены в `style.css`. |
 | **Анимация** | Поэтапное появление, полоса прогресса прокрутки, параллакс, счётчики, схемы, которые «запускаются» при прокрутке, меню со скользящим индикатором и подсветкой раздела, магнитные кнопки, 3D-наклон карточки в первом экране, плавная прокрутка к якорям. Смена темы расходится кругом от переключателя, смена языка — размытое перетекание (View Transitions API). |
-| **Меньше движения** | Для посетителей, которые просят уменьшить анимацию, всё выключается, страница полностью статична. Параметр `?motion=full` показывает анимацию независимо от настройки ОС. |
+| **Мягкий режим** | Если ОС посетителя просит уменьшить движение, остаются только плавные появления и подсветка: сдвиги, масштаб, размытие, параллакс, наклон, зацикленные эффекты и большие переходы отключаются (смена темы и языка становится обычным перетеканием). Параметр `?motion=full` показывает полную версию независимо от настройки ОС. |
 | **Адаптивность** | Вёрстка от телефона, без горизонтальной прокрутки, проверена от 375 px. |
 | **Доступность** | Семантические блоки, skip-ссылка, видимый фокус, `aria-pressed`, содержимое видно без JS. |
 | **Без зависимостей** | Чистые HTML, CSS и JavaScript. Снаружи подгружаются только шрифты Google Fonts (Manrope, JetBrains Mono). |
