@@ -15,12 +15,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
   <link rel="stylesheet" href="style.css">
   <script>
-    /* Set theme before first paint to avoid a flash. Light is the default. */
+    /* Set theme before first paint to avoid a flash. Light is the default; ?theme=dark|light overrides it. */
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
-      try { d.dataset.theme = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'; }
-      catch (e) { d.dataset.theme = 'light'; }
+      var param = new URLSearchParams(location.search).get('theme');
+      try { d.dataset.theme = (param || localStorage.getItem('theme')) === 'dark' ? 'dark' : 'light'; }
+      catch (e) { d.dataset.theme = param === 'dark' ? 'dark' : 'light'; }
     })();
   </script>
 </head>
