@@ -1,4 +1,6 @@
+# Résumé sources and build tooling stay on my machine; only the finished PDFs in assets/ are published.
 # Personal data and local-only files — never commit these.
+resume/
 resume/phone.local.txt
 resume/dist/
 

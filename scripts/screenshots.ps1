@@ -34,5 +34,8 @@ Shot 'full-light'   '?lang=en&theme=light' 1440 4150  1
 Shot 'mobile-light' '?lang=en&theme=light'  500 1000  2
 Shot 'mobile-dark'  '?lang=en&theme=dark'   500 1000  2
 
-# One A4 page of the résumé (public version: no phone number).
-Shot 'resume-en'    ''                      794 1123  1.5 'resume\resume-en.html'
+# One A4 page of the résumé. The résumé sources are kept locally (not in this repository),
+# so this step runs only where they exist.
+if (Test-Path (Join-Path $root 'resume\resume-en.html')) {
+  Shot 'resume-en'  ''                      794 1123  1.5 'resume\resume-en.html'
+}

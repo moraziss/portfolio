@@ -4,7 +4,7 @@
 
 **Go developer · Backend / DevOps**<br>
 A fast, dependency-free personal site: bilingual (RU / EN), light and dark themes,
-rich but accessible motion, and a one-page résumé built from the same source.
+rich but accessible motion, and a one-page résumé in RU and EN.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
@@ -53,7 +53,7 @@ I'm a backend developer, so there is no product UI to screenshot. Instead the pa
 | **Responsive** | Phone-first layout, no horizontal scroll, tested from 375 px up. |
 | **Accessible** | Semantic landmarks, skip link, visible focus, `aria-pressed` toggles, content visible without JS. |
 | **Zero dependencies** | Plain HTML, CSS and JavaScript. Only Google Fonts (Manrope, JetBrains Mono) are loaded from outside. |
-| **Résumé pipeline** | HTML → PDF with headless Edge/Chrome: single column, real text, correct reading order for ATS. RU and EN. |
+| **Résumé** | A one-page PDF in RU and EN, laid out for ATS (single column, real text, correct reading order). The button follows the page language. |
 
 ## Screenshots
 
@@ -86,7 +86,6 @@ I'm a backend developer, so there is no product UI to screenshot. Instead the pa
 ├── robots.txt           crawler rules
 ├── sitemap.xml          sitemap (single canonical URL)
 ├── assets/              favicon, social preview (og-image.png) and the public résumé PDFs (RU / EN)
-├── resume/              résumé sources (HTML + CSS) and the PDF build script
 ├── scripts/             screenshots.ps1 (README images), og-image.py (social preview)
 └── docs/screenshots/    images used in this README
 ```
@@ -109,20 +108,6 @@ Open <http://localhost:5173>. Useful parameters: `?lang=en`, `?theme=dark`, `?mo
 - **English text** — the `EN` object at the top of `main.js`; each key matches a `data-i18n` attribute.
 - **Colors and fonts** — CSS variables at the top of `style.css`.
 
-## Rebuild the résumé
-
-```bash
-powershell -ExecutionPolicy Bypass -File resume/build.ps1
-```
-
-Needs Edge or Chrome. Output:
-
-- `assets/*.pdf` — public versions (no phone number), served by the site; the button follows the page language.
-- `resume/dist/*.pdf` — full versions for recruiters. The phone number is read from `resume/phone.local.txt`,
-  which is git-ignored, so it never reaches this public repository.
-
-Regenerate the README images with `powershell -ExecutionPolicy Bypass -File scripts/screenshots.ps1`.
-
 ## Deploy
 
 GitHub Pages, straight from the `main` branch:
@@ -131,6 +116,12 @@ GitHub Pages, straight from the `main` branch:
 2. For a custom domain, enter it under **Custom domain** (GitHub commits a `CNAME` file), then enable **Enforce HTTPS**.
 3. DNS at the registrar — apex domain: four `A` records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`;
    `www`: a `CNAME` to `moraziss.github.io`.
+
+## A personal project
+
+This is my personal portfolio, not an open-source template. The source is public so anyone can see how the site is built,
+but it is **not open to contributions**: pull requests and issues from outside are not accepted and will be closed without review.
+© 2026 Vadim Grushin. All rights reserved.
 
 ## Contact
 
@@ -150,7 +141,7 @@ GitHub Pages, straight from the `main` branch:
 <div align="right"><a href="#vadim-grushin--portfolio">↑ English</a></div>
 
 **Вадим Грушин — Go-разработчик · Backend / DevOps.** Быстрый личный сайт без зависимостей: два языка (RU / EN),
-светлая и тёмная темы, богатая, но доступная анимация и одностраничное резюме, собранное из тех же исходников.
+светлая и тёмная темы, богатая, но доступная анимация и одностраничное резюме на русском и английском.
 
 **Сайт: [vadimgrushin.dev](https://vadimgrushin.dev)**
 
@@ -181,7 +172,7 @@ GitHub Pages, straight from the `main` branch:
 | **Адаптивность** | Вёрстка от телефона, без горизонтальной прокрутки, проверена от 375 px. |
 | **Доступность** | Семантические блоки, skip-ссылка, видимый фокус, `aria-pressed`, содержимое видно без JS. |
 | **Без зависимостей** | Чистые HTML, CSS и JavaScript. Снаружи подгружаются только шрифты Google Fonts (Manrope, JetBrains Mono). |
-| **Резюме из исходников** | HTML → PDF через headless Edge/Chrome: одна колонка, настоящий текст, правильный порядок чтения для ATS. RU и EN. |
+| **Резюме** | Одностраничный PDF на русском и английском, вёрстка рассчитана на ATS (одна колонка, настоящий текст, правильный порядок чтения). Кнопка выбирает файл по языку страницы. |
 
 ### Структура проекта
 
@@ -194,7 +185,6 @@ GitHub Pages, straight from the `main` branch:
 ├── robots.txt           правила для поисковых роботов
 ├── sitemap.xml          карта сайта (один канонический адрес)
 ├── assets/              фавикон, превью для соцсетей (og-image.png) и публичные PDF резюме (RU / EN)
-├── resume/              исходники резюме (HTML + CSS) и скрипт сборки PDF
 ├── scripts/             screenshots.ps1 (картинки для README), og-image.py (превью для соцсетей)
 └── docs/screenshots/    картинки для README
 ```
@@ -217,20 +207,6 @@ python -m http.server 5173
 - **Английский текст** — объект `EN` в начале `main.js`; ключ совпадает с атрибутом `data-i18n` у элемента.
 - **Цвета и шрифты** — CSS-переменные в начале `style.css`.
 
-### Как пересобрать резюме
-
-```bash
-powershell -ExecutionPolicy Bypass -File resume/build.ps1
-```
-
-Нужен Edge или Chrome. Результат:
-
-- `assets/*.pdf` — публичные версии (без телефона), их отдаёт сайт; кнопка выбирает PDF по языку страницы.
-- `resume/dist/*.pdf` — полные версии для рекрутёров. Телефон берётся из `resume/phone.local.txt`;
-  этот файл в `.gitignore`, поэтому в публичный репозиторий он не попадает.
-
-Картинки для README пересоздаются командой `powershell -ExecutionPolicy Bypass -File scripts/screenshots.ps1`.
-
 ### Публикация
 
 GitHub Pages прямо из ветки `main`:
@@ -239,6 +215,12 @@ GitHub Pages прямо из ветки `main`:
 2. Для своего домена впишите его в **Custom domain** (GitHub сам закоммитит файл `CNAME`) и включите **Enforce HTTPS**.
 3. DNS у регистратора — для корневого домена четыре `A`-записи `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`;
    для `www` — `CNAME` на `moraziss.github.io`.
+
+### Личный проект
+
+Это моё личное портфолио, а не открытый шаблон. Исходники открыты, чтобы любой мог посмотреть, как устроен сайт,
+но **вклад со стороны не принимается**: pull request'ы и issues от посторонних не рассматриваются и закрываются без ответа.
+© 2026 Вадим Грушин. Все права защищены.
 
 ### Контакты
 
