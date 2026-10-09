@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — страница не найдена · Вадим Грушин</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f5f7fa">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+  <!-- Absolute paths: GitHub Pages serves this file for any missing URL, at any depth. -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .nf { min-height: 100vh; display: grid; align-content: center; padding-block: 64px; }
+    .nf-code { font-size: clamp(5rem, 22vw, 11rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.05em; }
+    .nf .lead { margin-bottom: 28px; }
+  </style>
+  <script>
+    /* Same theme bootstrap as index.html: light by default, remembered choice wins. */
+    (function () {
+      var d = document.documentElement;
+      var param = new URLSearchParams(location.search).get('theme');
+      try { d.dataset.theme = (param || localStorage.getItem('theme')) === 'dark' ? 'dark' : 'light'; }
+      catch (e) { d.dataset.theme = param === 'dark' ? 'dark' : 'light'; }
+    })();
+  </script>
+</head>
+<body>
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <main class="container nf">
+    <p class="role">HTTP 404</p>
+    <h1 class="nf-code"><span class="grad">404</span></h1>
+    <p class="lead">
+      Такой страницы здесь нет — возможно, ссылка устарела или в адресе опечатка.
+      <br>
+      <span lang="en">This page doesn't exist — the link may be outdated or mistyped.</span>
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/">На главную · Home</a>
+      <a class="btn btn-ghost" href="/#projects">Проекты · Projects</a>
+    </div>
+  </main>
+</body>
+</html>
